@@ -1,5 +1,6 @@
 
 # views.py
+from contextvars import Token
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response 
@@ -46,9 +47,22 @@ class studentAPI(APIView):
             return Response({"status": 200, "message": "Data has been deleted"})
         except Exception as e:
             return Response({"status": 403, "message": "Invalid ID", "error": str(e)})
-        
-    
 
+
+class RegisterUser(APIView):
+    def post(self,request):
+        serializer = UserSerializer(data = request.data)
+
+        if not serializer.is_valid():
+            return Response({"status": 403, "errors": serializer.errors, "message": "Something went wrong"})
+        serializer.save()
+
+        user=User.objects.get(username= serializer.data['username'])
+        Token.objects.get_or_create(user=user)
+
+
+        return Response({"status": 200, "payload": serializer.data, "message": "Your new data data is saved"})
+    
 
 
 
