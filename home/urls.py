@@ -5,7 +5,11 @@ from . import views
 
 urlpatterns = [
 
+    path('generic-student/',views.StudentGeneric.as_view()),
+    path('generic-student/<id>/',views.StudentGeneric1.as_view()),
+
     path('student/',views.studentAPI.as_view()),
+    path('registerUser/',views.RegisterUser.as_view()),
     
     # path('',views.home,name='firstView_url'),
     # path('post_student',views.post_student,name='postStudent_url'),
